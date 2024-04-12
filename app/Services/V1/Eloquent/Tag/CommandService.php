@@ -2,20 +2,35 @@
 
 namespace App\Services\V1\Eloquent\Tag;
 
-class CommandService
+use App\Http\DTO\Tag\CreateTagDto;
+use App\Http\DTO\Tag\UpdateTagDto;
+use App\Models\Tag;
+
+readonly class CommandService
 {
-    public function create()
-    {
-        
+    public function __construct(
+        private QueryService $queryService,
+    ) {
     }
 
-    public function update()
+    public function create(CreateTagDto $dto): Tag
     {
-        
+        return Tag::create($dto->toArray());
     }
 
-    public function delete()
+    public function update(int $tagId, UpdateTagDto $dto): Tag
     {
-        
+        $tag = $this->queryService->getById($tagId);
+
+        $tag->update($dto->toArray());
+
+        return $tag;
+    }
+
+    public function delete(int $tagId): void
+    {
+        $tag = $this->queryService->getById($tagId);
+
+        $tag->delete();
     }
 }

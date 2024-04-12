@@ -1,23 +1,23 @@
 <?php
 
-namespace App\Http\Resources\V1\Banner;
+namespace App\Http\Resources\V1\Tag;
 
-use App\Models\Banner;
+use App\Models\Tag;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 use OpenApi\Attributes as OA;
 
 /**
- * @mixin Banner
+ * @mixin Tag
  */
 #[OA\Response(
-    response: 'BannerResponse',
+    response: 'TagResponse',
     description: 'Success',
     content: [
         new OA\MediaType(
             mediaType: 'application/json',
             schema: new OA\Schema(
-                ref: '#/components/schemas/BannerResource'
+                ref: '#/components/schemas/TagResource'
             )
         ),
     ]
@@ -25,8 +25,7 @@ use OpenApi\Attributes as OA;
 #[OA\Schema(
     required: [
         'id',
-        'feature_id',
-        'json_data',
+        'name',
         'created_at',
         'updated_at',
     ],
@@ -37,14 +36,9 @@ use OpenApi\Attributes as OA;
             example: 1,
         ),
         new OA\Property(
-            property: 'feature_id',
-            type: 'integer',
-            example: 1,
-        ),
-        new OA\Property(
-            property: 'json_data',
+            property: 'name',
             type: 'string',
-            example: '[]',
+            example: 'tag name',
         ),
         new OA\Property(
             property: 'created_at',
@@ -58,14 +52,13 @@ use OpenApi\Attributes as OA;
         ),
     ]
 )]
-class BannerResource extends JsonResource
+class TagResource extends JsonResource
 {
     public function toArray(Request $request): array
     {
         return [
             'id' => $this->id,
-            'feature_id' => $this->feature_id,
-            'json_data' => json_decode($this->json_data),
+            'name' => $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,
         ];

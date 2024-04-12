@@ -1,0 +1,25 @@
+### 200 OK
+GET {{host}}/v1/features?page=1&limit=10
+Accept: application/json
+Content-Type: application/json
+
+### 201 OK
+POST {{host}}/v1/banners
+Accept: application/json
+Content-Type: application/json
+
+{
+  "feature_id" : 2,
+  "json_data": "{\"тип\": \"баннер\",}"
+}
+
+### 204 Success deleted
+DELETE {{host}}/v1/role/2
+Accept: application/json
+Content-Type: application/json
+
+
+### 200 OK
+GET {{host}}/v1/permission?page=1&limit=10&search=user
+Accept: application/json
+Content-Type: application/json

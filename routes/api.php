@@ -16,28 +16,28 @@ Route::get('/user', function (Request $request) {
 Route::prefix('v1')->group(function () {
     Route::prefix('banners')->group(function () {
        Route::get('/', [BannerQueryController::class, 'index']);
-       Route::get('/{id}', [BannerQueryController::class, 'show']);
+       Route::get('{id}', [BannerQueryController::class, 'show']);
 
-       Route::post('/', [BannerCommandController::class, 'store']);
-       Route::put('/{id}', [BannerCommandController::class, 'update']);
-       Route::delete('/{id}', [BannerCommandController::class, 'destroy']);
+       Route::post('/', [BannerCommandController::class, 'create']);
+       Route::put('{id}', [BannerCommandController::class, 'update']);
+       Route::delete('{id}', [BannerCommandController::class, 'delete']);
     });
 
     Route::prefix('features')->group(function () {
        Route::get('/', [FeatureQueryController::class, 'index']);
-       Route::get('/{id}', [FeatureQueryController::class, 'show']);
+       Route::get('{id}', [FeatureQueryController::class, 'show']);
 
-       Route::post('/', [FeatureCommandController::class, 'store']);
-       Route::put('/{id}', [FeatureCommandController::class, 'update']);
-       Route::delete('/{id}', [FeatureCommandController::class, 'destroy']);
+       Route::post('/', [FeatureCommandController::class, 'create']);
+       Route::put('{id}', [FeatureCommandController::class, 'update']);
+       Route::delete('{id}', [FeatureCommandController::class, 'delete']);
     });
 
     Route::prefix('tags')->group(function () {
         Route::get('/', [TagQueryController::class, 'index']);
-        Route::get('/{id}', [TagQueryController::class, 'show']);
+        Route::get('{id}', [TagQueryController::class, 'show']);
 
-        Route::post('/', [TagCommandController::class, 'store']);
-        Route::put('/{id}', [TagCommandController::class, 'update']);
-        Route::delete('/{id}', [TagCommandController::class, 'destroy']);
+        Route::post('/', [TagCommandController::class, 'create']);
+        Route::put('{id}', [TagCommandController::class, 'update']);
+        Route::delete('{id}', [TagCommandController::class, 'delete']);
     });
 });

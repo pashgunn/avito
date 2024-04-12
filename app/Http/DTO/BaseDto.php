@@ -56,4 +56,41 @@ abstract class BaseDto
 
         return $this;
     }
+
+    public function buildWithoutNull(Request $request): self
+    {
+        $properties = get_class_vars(get_class($this));
+
+        foreach ($request->validated() as $key => $value) {
+            if (key_exists($key, $properties) && !is_null($value)) {
+                $this->$key = $value;
+            }
+        }
+        return $this;
+    }
+
+    public function buildFromArrayWithoutNull(array $data): self
+    {
+        $properties = get_class_vars(get_class($this));
+
+        foreach ($data as $key => $value) {
+            if (key_exists($key, $properties) && !is_null($value)) {
+                $this->$key = $value;
+            }
+        }
+        return $this;
+    }
+
+    public function toArrayWithoutNull(): array
+    {
+        $data = [];
+        $properties = get_class_vars(get_class($this));
+
+        foreach ($properties as $property => $value) {
+            if (isset($this->$property)) {
+                $data[$property] = $this->$property;
+            }
+        }
+        return $data;
+    }
 }

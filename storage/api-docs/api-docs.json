@@ -1,0 +1,1124 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "AVITO API",
+        "description": "API endpoints for AVITO",
+        "contact": {
+            "email": "pashaboga4ev@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://0.0.0.0:80/api",
+            "description": "Base server for development"
+        }
+    ],
+    "paths": {
+        "/v1/banners": {
+            "get": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Get list of banners",
+                "operationId": "bannersList",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/BannerCollectionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Create banner",
+                "operationId": "createBanner",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CreateBannerRequestBody"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/BannerResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/banners/{id}": {
+            "get": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Get banner by id",
+                "operationId": "getBanner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/BannerResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Update banner",
+                "operationId": "updateBanner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateBannerRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/BannerResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Delete banner",
+                "operationId": "deleteBanner",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessDeletedResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/features": {
+            "get": {
+                "tags": [
+                    "Avito Feature"
+                ],
+                "summary": "Get list of features",
+                "operationId": "featuresList",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FeatureCollectionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Avito Feature"
+                ],
+                "summary": "Create feature",
+                "operationId": "createFeature",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CreateFeatureRequestBody"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/FeatureResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/features/{id}": {
+            "get": {
+                "tags": [
+                    "Avito Feature"
+                ],
+                "summary": "Get feature by id",
+                "operationId": "getFeature",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FeatureResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Avito Feature"
+                ],
+                "summary": "Update feature",
+                "operationId": "updateFeature",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateFeatureRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/FeatureResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Avito Feature"
+                ],
+                "summary": "Delete feature",
+                "operationId": "deleteFeature",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessDeletedResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/tags": {
+            "get": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Get list of tags",
+                "operationId": "tagsList",
+                "parameters": [
+                    {
+                        "name": "limit",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 10
+                        }
+                    },
+                    {
+                        "name": "page",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer",
+                            "default": 1
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TagCollectionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "post": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Create tag",
+                "operationId": "createTag",
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/CreateTagRequestBody"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/TagResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/v1/tags/{id}": {
+            "get": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Get tag by id",
+                "operationId": "getTag",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TagResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "put": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Update tag",
+                "operationId": "updateTag",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateTagRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TagResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            },
+            "delete": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Delete tag",
+                "operationId": "deleteTag",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessDeletedResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        }
+    },
+    "components": {
+        "schemas": {
+            "CreateBannerRequest": {
+                "required": [
+                    "feature_id",
+                    "json_data"
+                ],
+                "properties": {
+                    "feature_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "json_data": {
+                        "type": "string",
+                        "example": "{\"url\": \"https://google.com\", \"title\": \"google\"}"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateBannerRequest": {
+                "properties": {
+                    "feature_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "json_data": {
+                        "type": "string",
+                        "example": "{\"url\": \"https://google.com\", \"title\": \"google\"}"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateFeatureRequest": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "feature name"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateFeatureRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "feature name"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateTagRequest": {
+                "required": [
+                    "name"
+                ],
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "tag name"
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateTagRequest": {
+                "properties": {
+                    "name": {
+                        "type": "string",
+                        "example": "tag name"
+                    }
+                },
+                "type": "object"
+            },
+            "BannerCollection": {
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "$ref": "#/components/schemas/BannerResource"
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "BannerResource": {
+                "required": [
+                    "id",
+                    "feature_id",
+                    "json_data",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "feature_id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "json_data": {
+                        "type": "string",
+                        "example": "[]"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "FeatureCollection": {
+                "required": [
+                    "data"
+                ],
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ResourceCollection"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/FeatureResource"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "FeatureResource": {
+                "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "feature name"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "ResourceCollection": {
+                "required": [
+                    "data"
+                ],
+                "properties": {
+                    "data": {
+                        "type": "array",
+                        "items": {
+                            "type": "object"
+                        }
+                    },
+                    "meta": {
+                        "properties": {
+                            "current_page": {
+                                "type": "number",
+                                "example": 2
+                            },
+                            "from": {
+                                "type": "number",
+                                "example": 1
+                            },
+                            "last_page": {
+                                "type": "number",
+                                "example": 8
+                            },
+                            "links": {
+                                "type": "object"
+                            },
+                            "path": {
+                                "type": "string",
+                                "example": "http://0.0.0.0/api/v1/object/list?page=2"
+                            },
+                            "per_page": {
+                                "type": "number",
+                                "example": 1
+                            },
+                            "to": {
+                                "type": "number",
+                                "example": 1
+                            },
+                            "total": {
+                                "type": "number",
+                                "example": 1
+                            }
+                        },
+                        "type": "object"
+                    }
+                },
+                "type": "object"
+            },
+            "BadOperation": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Bad operation"
+                    }
+                },
+                "type": "object"
+            },
+            "Forbidden": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "This action is unauthorized."
+                    }
+                },
+                "type": "object"
+            },
+            "InvalidData": {
+                "required": [
+                    "message",
+                    "errors"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Any error message"
+                    },
+                    "errors": {
+                        "type": "object",
+                        "additionalProperties": {
+                            "type": "array",
+                            "items": {
+                                "type": "string",
+                                "example": "Validation error"
+                            }
+                        }
+                    }
+                },
+                "type": "object"
+            },
+            "NotFound": {
+                "required": [
+                    "error"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "string",
+                        "example": "Not Found"
+                    }
+                },
+                "type": "object"
+            },
+            "Success": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Success."
+                    }
+                },
+                "type": "object"
+            },
+            "SuccessDeleted": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Success deleted."
+                    }
+                },
+                "type": "object"
+            },
+            "Unauthorized": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "message": {
+                        "type": "string",
+                        "example": "Unauthorized"
+                    }
+                },
+                "type": "object"
+            },
+            "TagCollection": {
+                "required": [
+                    "data"
+                ],
+                "type": "object",
+                "allOf": [
+                    {
+                        "$ref": "#/components/schemas/ResourceCollection"
+                    },
+                    {
+                        "properties": {
+                            "data": {
+                                "type": "array",
+                                "items": {
+                                    "$ref": "#/components/schemas/TagResource"
+                                }
+                            }
+                        },
+                        "type": "object"
+                    }
+                ]
+            },
+            "TagResource": {
+                "required": [
+                    "id",
+                    "name",
+                    "created_at",
+                    "updated_at"
+                ],
+                "properties": {
+                    "id": {
+                        "type": "integer",
+                        "example": 1
+                    },
+                    "name": {
+                        "type": "string",
+                        "example": "tag name"
+                    },
+                    "created_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    },
+                    "updated_at": {
+                        "type": "string",
+                        "format": "date-time"
+                    }
+                },
+                "type": "object"
+            }
+        },
+        "responses": {
+            "BannerCollectionResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BannerCollection"
+                        }
+                    }
+                }
+            },
+            "BannerResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BannerResource"
+                        }
+                    }
+                }
+            },
+            "FeatureCollectionResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/FeatureCollection"
+                        }
+                    }
+                }
+            },
+            "FeatureResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/FeatureResource"
+                        }
+                    }
+                }
+            },
+            "BadOperationResponse": {
+                "description": "Bad operation",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/BadOperation"
+                        }
+                    }
+                }
+            },
+            "ForbiddenResponse": {
+                "description": "Forbidden Response",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Forbidden"
+                        }
+                    }
+                }
+            },
+            "InvalidDataResponse": {
+                "description": "Invalid data",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/InvalidData"
+                        }
+                    }
+                }
+            },
+            "NotFoundResponse": {
+                "description": "Not Found",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/NotFound"
+                        }
+                    }
+                }
+            },
+            "SuccessResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Success"
+                        }
+                    }
+                }
+            },
+            "SuccessDeletedResponse": {
+                "description": "Success Deleted",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/SuccessDeleted"
+                        }
+                    }
+                }
+            },
+            "UnauthorizedResponse": {
+                "description": "Unauthorized",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/Unauthorized"
+                        }
+                    }
+                }
+            },
+            "TagCollectionResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TagCollection"
+                        }
+                    }
+                }
+            },
+            "TagResponse": {
+                "description": "Success",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/TagResource"
+                        }
+                    }
+                }
+            }
+        },
+        "requestBodies": {
+            "CreateBannerRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateBannerRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateBannerRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateBannerRequest"
+                        }
+                    }
+                }
+            },
+            "CreateFeatureRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateFeatureRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateFeatureRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateFeatureRequest"
+                        }
+                    }
+                }
+            },
+            "CreateTagRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateTagRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateTagRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateTagRequest"
+                        }
+                    }
+                }
+            }
+        },
+        "securitySchemes": {
+            "bearerAuth": {
+                "type": "http",
+                "description": "",
+                "name": "Authorization",
+                "in": "header",
+                "bearerFormat": "",
+                "scheme": "Bearer"
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Avito Banner",
+            "description": "Avito Banners"
+        },
+        {
+            "name": "Avito Feature",
+            "description": "Avito Features"
+        },
+        {
+            "name": "Avito Tag",
+            "description": "Avito Tags"
+        }
+    ]
+}

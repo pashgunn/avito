@@ -13,7 +13,7 @@ use OpenApi\Attributes as OA;
     )
 )]
 #[OA\Server(
-    url: 'http://0.0.0.0:8000/api',
+    url: 'http://0.0.0.0:80/api',
     description: 'Base server for development'
 )]
 #[OA\SecurityScheme(
@@ -30,12 +30,12 @@ use OpenApi\Attributes as OA;
     description: 'Avito Banners'
 )]
 #[OA\Tag(
-    name: 'Avito Tag',
-    description: 'Avito Tags'
-)]
-#[OA\Tag(
     name: 'Avito Feature',
     description: 'Avito Features'
+)]
+#[OA\Tag(
+    name: 'Avito Tag',
+    description: 'Avito Tags'
 )]
 class Meta
 {
