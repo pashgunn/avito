@@ -3,9 +3,11 @@
 namespace App\Http\Api\V1\Controllers\Banner;
 
 use App\Http\Api\V1\Controllers\Controller;
+use App\Http\Api\V1\Requests\Banner\BulkDeleteRequest;
 use App\Http\Api\V1\Requests\Banner\CreateBannerRequest;
 use App\Http\Api\V1\Requests\Banner\UpdateBannerRequest;
 use App\Http\Api\V1\Requests\Banner\UpdateStatusBannerRequest;
+use App\Http\DTO\Banner\BulkDeleteBannerDto;
 use App\Http\DTO\Banner\CreateBannerDto;
 use App\Http\DTO\Banner\UpdateBannerDto;
 use App\Http\DTO\Banner\UpdateStatusBannerDto;
@@ -237,5 +239,72 @@ class CommandController extends Controller
         $this->commandService->delete($bannerId);
 
         return response()->noContent();
+    }
+
+    #[OA\Delete(
+        path: '/banner/bulk-delete',
+        operationId: 'bulkDeleteBanners',
+        summary: 'Bulk delete banners',
+        security: [['bearerAuth' => []]],
+        tags: ['Avito Banner'],
+        parameters: [
+            new OA\Parameter(
+                name: 'tag_id',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(
+                    type: 'integer',
+                ),
+            ),
+            new OA\Parameter(
+                name: 'feature_id',
+                in: 'query',
+                required: false,
+                schema: new OA\Schema(
+                    type: 'integer',
+                ),
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                ref: '#/components/responses/SuccessResponse',
+                response: 200,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/InvalidDataResponse',
+                response: 400,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/UnauthorizedResponse',
+                response: 401,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/ForbiddenResponse',
+                response: 403,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/NotFoundResponse',
+                response: 404,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/InternalServerErrorResponse',
+                response: 500,
+            ),
+        ]
+    )]
+    public function deleteBanners(BulkDeleteRequest $request, BulkDeleteBannerDto $dto): JsonResponse
+    {
+        $this->commandService->deleteBanners($dto->buildWithoutNull($request));
+
+        return $this->responseOkWithMessage('Banners deleted');
     }
 }

@@ -281,6 +281,67 @@
                 ]
             }
         },
+        "/banner/bulk-delete": {
+            "delete": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Bulk delete banners",
+                "operationId": "bulkDeleteBanners",
+                "parameters": [
+                    {
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "feature_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerErrorResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
         "/user_banner": {
             "get": {
                 "tags": [
@@ -329,13 +390,16 @@
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/BannerResponse"
+                        "$ref": "#/components/responses/UserBannerResponse"
                     },
                     "400": {
                         "$ref": "#/components/responses/InvalidDataResponse"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFoundResponse"
@@ -1019,25 +1083,18 @@
             },
             "UpdateStatusBannerRequest": {
                 "required": [
-                    "feature_id",
-                    "content"
+                    "banner_id",
+                    "is_active"
                 ],
                 "properties": {
-                    "enable": {
+                    "banner_id": {
+                        "type": "integer",
+                        "format": "int64",
+                        "example": 1
+                    },
+                    "is_active": {
                         "type": "boolean",
                         "example": true
-                    },
-                    "banner_ids": {
-                        "type": "array",
-                        "items": {
-                            "type": "integer",
-                            "format": "int64"
-                        },
-                        "example": [
-                            1,
-                            2,
-                            3
-                        ]
                     }
                 },
                 "type": "object"
@@ -1170,24 +1227,13 @@
                 "type": "object"
             },
             "FeatureCollection": {
-                "required": [
-                    "data"
-                ],
-                "type": "object",
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/FeatureResource"
+                },
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/ResourceCollection"
-                    },
-                    {
-                        "properties": {
-                            "data": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/FeatureResource"
-                                }
-                            }
-                        },
-                        "type": "object"
                     }
                 ]
             },
@@ -1352,24 +1398,13 @@
                 "type": "object"
             },
             "TagCollection": {
-                "required": [
-                    "data"
-                ],
-                "type": "object",
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/FeatureResource"
+                },
                 "allOf": [
                     {
                         "$ref": "#/components/schemas/ResourceCollection"
-                    },
-                    {
-                        "properties": {
-                            "data": {
-                                "type": "array",
-                                "items": {
-                                    "$ref": "#/components/schemas/TagResource"
-                                }
-                            }
-                        },
-                        "type": "object"
                     }
                 ]
             },
@@ -1413,7 +1448,7 @@
                 }
             },
             "BannerResponse": {
-                "description": "Created",
+                "description": "OK",
                 "content": {
                     "application/json": {
                         "schema": {

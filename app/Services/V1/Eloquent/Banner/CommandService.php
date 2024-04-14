@@ -2,9 +2,11 @@
 
 namespace App\Services\V1\Eloquent\Banner;
 
+use App\Http\DTO\Banner\BulkDeleteBannerDto;
 use App\Http\DTO\Banner\CreateBannerDto;
 use App\Http\DTO\Banner\UpdateBannerDto;
 use App\Http\DTO\Banner\UpdateStatusBannerDto;
+use App\Jobs\DeleteBanner;
 use App\Models\Banner;
 
 readonly class CommandService
@@ -50,5 +52,10 @@ readonly class CommandService
     public function toggleStatus(UpdateStatusBannerDto $dto): bool|int
     {
         return Banner::query()->where('id', $dto->banner_id)->update(['is_active' => $dto->is_active]);
+    }
+
+    public function deleteBanners(BulkDeleteBannerDto $dto): void
+    {
+        DeleteBanner::dispatch($dto->tag_id, $dto->feature_id);
     }
 }

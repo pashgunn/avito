@@ -19,6 +19,8 @@ Route::middleware(CheckAdmin::class)->group(function () {
         Route::post('/', [BannerCommandController::class, 'create']);
         Route::put('bulk-toggle-status', [BannerCommandController::class, 'updateBannerStatuses']);
         Route::patch('{id}', [BannerCommandController::class, 'update']);
+
+        Route::delete('bulk-delete', [BannerCommandController::class, 'deleteBanners']);
         Route::delete('{id}', [BannerCommandController::class, 'delete']);
     });
 
