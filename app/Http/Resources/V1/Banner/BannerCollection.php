@@ -7,7 +7,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Response(
     response: 'BannerCollectionResponse',
-    description: 'Success',
+    description: 'OK',
     content: [
         new OA\MediaType(
             mediaType: 'application/json',
@@ -18,16 +18,10 @@ use OpenApi\Attributes as OA;
     ]
 )]
 #[OA\Schema(
-    required: ['data'],
-    properties: [
-        new OA\Property(
-            property: 'data',
-            type: 'array',
-            items: new OA\Items(
-                ref: '#/components/schemas/BannerResource'
-            )
-        ),
-    ]
+    type: 'array',
+    items: new OA\Items(
+        ref: '#/components/schemas/BannerResource'
+    )
 )]
 class BannerCollection extends ResourceCollection
 {

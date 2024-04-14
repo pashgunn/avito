@@ -20,7 +20,7 @@ class CommandController extends Controller
     }
 
     #[OA\Post(
-        path: '/v1/features',
+        path: '/feature',
         operationId: 'createFeature',
         summary: 'Create feature',
         security: [['bearerAuth' => []]],
@@ -28,6 +28,17 @@ class CommandController extends Controller
             ref: '#/components/requestBodies/CreateFeatureRequestBody'
         ),
         tags: ['Avito Feature'],
+        parameters: [
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
+        ],
         responses: [
             new OA\Response(
                 ref: '#/components/responses/FeatureResponse',
@@ -51,7 +62,7 @@ class CommandController extends Controller
     }
 
     #[OA\Put(
-        path: '/v1/features/{id}',
+        path: '/feature/{id}',
         operationId: 'updateFeature',
         summary: 'Update feature',
         security: [['bearerAuth' => []]],
@@ -67,6 +78,15 @@ class CommandController extends Controller
                 schema: new OA\Schema(
                     type: 'integer',
                 ),
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
             ),
         ],
         responses: [
@@ -96,7 +116,7 @@ class CommandController extends Controller
     }
 
     #[OA\Delete(
-        path: '/v1/features/{id}',
+        path: '/feature/{id}',
         operationId: 'deleteFeature',
         summary: 'Delete feature',
         security: [['bearerAuth' => []]],
@@ -109,6 +129,15 @@ class CommandController extends Controller
                 schema: new OA\Schema(
                     type: 'integer',
                 ),
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
             ),
         ],
         responses: [

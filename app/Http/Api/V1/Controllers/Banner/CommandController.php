@@ -5,11 +5,15 @@ namespace App\Http\Api\V1\Controllers\Banner;
 use App\Http\Api\V1\Controllers\Controller;
 use App\Http\Api\V1\Requests\Banner\CreateBannerRequest;
 use App\Http\Api\V1\Requests\Banner\UpdateBannerRequest;
+use App\Http\Api\V1\Requests\Banner\UpdateStatusBannerRequest;
 use App\Http\DTO\Banner\CreateBannerDto;
 use App\Http\DTO\Banner\UpdateBannerDto;
+use App\Http\DTO\Banner\UpdateStatusBannerDto;
 use App\Http\Resources\V1\Banner\BannerResource;
+use App\Http\Resources\V1\Banner\CreateBannerResource;
 use App\Services\V1\Eloquent\Banner\CommandService;
 use Illuminate\Http\JsonResponse;
+use Illuminate\Http\Response;
 use OpenApi\Attributes as OA;
 
 class CommandController extends Controller
@@ -20,18 +24,79 @@ class CommandController extends Controller
     }
 
     #[OA\Post(
-        path: '/v1/banners',
+        path: '/banner',
         operationId: 'createBanner',
-        summary: 'Create banner',
+        summary: 'Создание нового баннера',
         security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/CreateBannerRequestBody'
         ),
         tags: ['Avito Banner'],
+        parameters: [
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
+        ],
         responses: [
             new OA\Response(
-                ref: '#/components/responses/BannerResponse',
+                ref: '#/components/responses/CreateBannerResponse',
                 response: 201,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/InvalidDataResponse',
+                response: 400,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/UnauthorizedResponse',
+                response: 401,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/ForbiddenResponse',
+                response: 403,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/InternalServerErrorResponse',
+                response: 500,
+            ),
+        ]
+    )]
+    public function create(CreateBannerRequest $request, CreateBannerDto $dto): JsonResponse
+    {
+        $banner = $this->commandService->create($dto->build($request));
+
+        return $this->responseCreated(CreateBannerResource::make($banner));
+    }
+
+    #[OA\Put(
+        path: '/banner/bulk-toggle-status',
+        operationId: 'bulkToggleStatus',
+        summary: 'Bulk multiple banner statuses',
+        security: [['bearerAuth' => []]],
+        requestBody: new OA\RequestBody(
+            ref: '#/components/requestBodies/UpdateStatusBannerRequestBody'
+        ),
+        tags: ['Avito Banner'],
+        parameters: [
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
+        ],
+        responses: [
+            new OA\Response(
+                ref: '#/components/responses/SuccessResponse',
+                response: 200,
             ),
             new OA\Response(
                 ref: '#/components/responses/UnauthorizedResponse',
@@ -43,17 +108,19 @@ class CommandController extends Controller
             ),
         ]
     )]
-    public function create(CreateBannerRequest $request, CreateBannerDto $dto): JsonResponse
-    {
-        $banner = $this->commandService->create($dto->build($request));
+    public function updateBannerStatuses(
+        UpdateStatusBannerRequest $request,
+        UpdateStatusBannerDto $dto
+    ): JsonResponse {
+        $banners = $this->commandService->toggleStatus($dto->build($request));
 
-        return $this->responseCreated(BannerResource::make($banner));
+        return $this->responseOk(['toggled_banners_count' => $banners]);
     }
 
-    #[OA\Put(
-        path: '/v1/banners/{id}',
+    #[OA\Patch(
+        path: '/banner/{id}',
         operationId: 'updateBanner',
-        summary: 'Update banner',
+        summary: 'Обновление содержимого баннера',
         security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/UpdateBannerRequestBody'
@@ -65,8 +132,18 @@ class CommandController extends Controller
                 in: 'path',
                 required: true,
                 schema: new OA\Schema(
+                    description: 'Идентификатор баннера',
                     type: 'integer',
                 ),
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
             ),
         ],
         responses: [
@@ -75,30 +152,38 @@ class CommandController extends Controller
                 response: 200,
             ),
             new OA\Response(
+                ref: '#/components/responses/InvalidDataResponse',
+                response: 400,
+            ),
+            new OA\Response(
                 ref: '#/components/responses/UnauthorizedResponse',
                 response: 401,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/ForbiddenResponse',
+                response: 403,
             ),
             new OA\Response(
                 ref: '#/components/responses/NotFoundResponse',
                 response: 404,
             ),
             new OA\Response(
-                ref: '#/components/responses/InvalidDataResponse',
-                response: 422,
+                ref: '#/components/responses/InternalServerErrorResponse',
+                response: 500,
             ),
         ]
     )]
     public function update(UpdateBannerRequest $request, int $bannerId, UpdateBannerDto $dto): JsonResponse
     {
-        $banner = $this->commandService->update($bannerId, $dto->build($request));
+        $banner = $this->commandService->update($bannerId, $dto->buildWithoutNull($request));
 
         return $this->responseOk(BannerResource::make($banner));
     }
 
     #[OA\Delete(
-        path: '/v1/banners/{id}',
+        path: '/banner/{id}',
         operationId: 'deleteBanner',
-        summary: 'Delete banner',
+        summary: 'Удаление баннера по идентификатору',
         security: [['bearerAuth' => []]],
         tags: ['Avito Banner'],
         parameters: [
@@ -110,26 +195,47 @@ class CommandController extends Controller
                     type: 'integer',
                 ),
             ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
         ],
         responses: [
             new OA\Response(
                 ref: '#/components/responses/SuccessDeletedResponse',
-                response: 200,
+                response: 204,
+            ),
+            new OA\Response(
+                ref: '#/components/responses/InvalidDataResponse',
+                response: 400,
             ),
             new OA\Response(
                 ref: '#/components/responses/UnauthorizedResponse',
                 response: 401,
             ),
             new OA\Response(
+                ref: '#/components/responses/ForbiddenResponse',
+                response: 403,
+            ),
+            new OA\Response(
                 ref: '#/components/responses/NotFoundResponse',
                 response: 404,
             ),
+            new OA\Response(
+                ref: '#/components/responses/InternalServerErrorResponse',
+                response: 500,
+            ),
         ]
     )]
-    public function delete(int $bannerId): JsonResponse
+    public function delete(int $bannerId): Response
     {
         $this->commandService->delete($bannerId);
 
-        return $this->responseOkWithMessage('Banner deleted successfully');
+        return response()->noContent();
     }
 }

@@ -14,7 +14,8 @@ return new class extends Migration
         Schema::create('banners', function (Blueprint $table) {
             $table->id();
             $table->foreignId('feature_id')->constrained('features')->cascadeOnDelete();
-            $table->json('json_data');
+            $table->json('content');
+            $table->boolean('is_active')->default(true);
             $table->timestamps();
         });
     }

@@ -24,14 +24,14 @@ use OpenApi\Attributes as OA;
 )]
 #[OA\Schema(
     required: [
-        'id',
+        'feature_id',
         'name',
         'created_at',
         'updated_at',
     ],
     properties: [
         new OA\Property(
-            property: 'id',
+            property: 'feature_id',
             type: 'integer',
             example: 1,
         ),
@@ -57,7 +57,7 @@ class FeatureResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'feature_id' => $this->id,
             'name' => $this->name,
             'created_at' => $this->created_at,
             'updated_at' => $this->updated_at,

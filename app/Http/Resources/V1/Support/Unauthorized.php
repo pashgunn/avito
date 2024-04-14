@@ -6,7 +6,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Response(
     response: 'UnauthorizedResponse',
-    description: 'Unauthorized',
+    description: 'Пользователь не авторизован',
     content: new OA\JsonContent(
         ref: '#/components/schemas/Unauthorized'
     )

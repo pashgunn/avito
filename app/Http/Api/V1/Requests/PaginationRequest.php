@@ -12,7 +12,7 @@ class PaginationRequest extends BaseRequest
     public function rules(): array
     {
         return [
-            'page' => ['integer', 'min:1'],
+            'page' => ['integer', 'min:0'],
             'limit' => ['integer', 'min:1'],
         ];
     }

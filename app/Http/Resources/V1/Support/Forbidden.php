@@ -6,7 +6,7 @@ use OpenApi\Attributes as OA;
 
 #[OA\Response(
     response: 'ForbiddenResponse',
-    description: 'Forbidden Response',
+    description: 'Пользователь не имеет доступа',
     content: new OA\JsonContent(
         ref: '#/components/schemas/Forbidden'
     )
@@ -17,7 +17,7 @@ use OpenApi\Attributes as OA;
         new OA\Property(
             property: 'message',
             type: 'string',
-            example: 'This action is unauthorized.'
+            example: 'This action is unauthorized'
         ),
     ],
 )]

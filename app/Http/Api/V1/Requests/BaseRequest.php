@@ -2,7 +2,9 @@
 
 namespace App\Http\Api\V1\Requests;
 
+use Illuminate\Contracts\Validation\Validator;
 use Illuminate\Foundation\Http\FormRequest;
+use Illuminate\Http\Exceptions\HttpResponseException;
 
 abstract class BaseRequest extends FormRequest
 {
@@ -28,7 +30,7 @@ abstract class BaseRequest extends FormRequest
     /**
      * Set default values if not filled
      */
-    public function prepareForValidation(): void
+    protected function prepareForValidation(): void
     {
         foreach ($this->defaultValues as $key => $value) {
             if (! $this->has($key) || ! $this->filled($key)) {
@@ -37,5 +39,15 @@ abstract class BaseRequest extends FormRequest
                 ]);
             }
         }
+    }
+
+    /**
+     * @throws HttpResponseException
+     */
+    protected function failedValidation(Validator $validator)
+    {
+        throw new HttpResponseException(response()->json([
+            $validator->errors()
+        ], 400));
     }
 }

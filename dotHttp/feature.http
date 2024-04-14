@@ -10,7 +10,7 @@ Content-Type: application/json
 
 {
   "feature_id" : 2,
-  "json_data": "{\"тип\": \"баннер\",}"
+  "content": "{\"тип\": \"баннер\",}"
 }
 
 ### 204 Success deleted

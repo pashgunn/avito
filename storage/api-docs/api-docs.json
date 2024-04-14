@@ -15,30 +15,58 @@
         }
     ],
     "paths": {
-        "/v1/banners": {
+        "/banner": {
             "get": {
                 "tags": [
                     "Avito Banner"
                 ],
-                "summary": "Get list of banners",
+                "summary": "Getting all banners with filtering by feature and/or tag",
                 "operationId": "bannersList",
                 "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    },
+                    {
+                        "name": "feature_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "description": "Идентификатор фичи",
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "description": "Идентификатор тега",
+                            "type": "integer"
+                        }
+                    },
                     {
                         "name": "limit",
                         "in": "query",
                         "required": false,
                         "schema": {
+                            "description": "Limit",
                             "type": "integer",
                             "default": 10
                         }
                     },
                     {
-                        "name": "page",
+                        "name": "offset",
                         "in": "query",
                         "required": false,
                         "schema": {
-                            "type": "integer",
-                            "default": 1
+                            "description": "Offset",
+                            "type": "integer"
                         }
                     }
                 ],
@@ -48,6 +76,12 @@
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerErrorResponse"
                     }
                 },
                 "security": [
@@ -60,14 +94,70 @@
                 "tags": [
                     "Avito Banner"
                 ],
-                "summary": "Create banner",
+                "summary": "Создание нового баннера",
                 "operationId": "createBanner",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "$ref": "#/components/requestBodies/CreateBannerRequestBody"
                 },
                 "responses": {
                     "201": {
-                        "$ref": "#/components/responses/BannerResponse"
+                        "$ref": "#/components/responses/CreateBannerResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerErrorResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/banner/bulk-toggle-status": {
+            "put": {
+                "tags": [
+                    "Avito Banner"
+                ],
+                "summary": "Bulk multiple banner statuses",
+                "operationId": "bulkToggleStatus",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/UpdateStatusBannerRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/SuccessResponse"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
@@ -83,13 +173,13 @@
                 ]
             }
         },
-        "/v1/banners/{id}": {
-            "get": {
+        "/banner/{id}": {
+            "delete": {
                 "tags": [
                     "Avito Banner"
                 ],
-                "summary": "Get banner by id",
-                "operationId": "getBanner",
+                "summary": "Удаление баннера по идентификатору",
+                "operationId": "deleteBanner",
                 "parameters": [
                     {
                         "name": "id",
@@ -98,14 +188,35 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
                     }
                 ],
                 "responses": {
-                    "200": {
-                        "$ref": "#/components/responses/BannerResponse"
+                    "204": {
+                        "$ref": "#/components/responses/SuccessDeletedResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerErrorResponse"
                     }
                 },
                 "security": [
@@ -114,11 +225,11 @@
                     }
                 ]
             },
-            "put": {
+            "patch": {
                 "tags": [
                     "Avito Banner"
                 ],
-                "summary": "Update banner",
+                "summary": "Обновление содержимого баннера",
                 "operationId": "updateBanner",
                 "parameters": [
                     {
@@ -126,7 +237,17 @@
                         "in": "path",
                         "required": true,
                         "schema": {
+                            "description": "Идентификатор баннера",
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
                         }
                     }
                 ],
@@ -137,14 +258,20 @@
                     "200": {
                         "$ref": "#/components/responses/BannerResponse"
                     },
+                    "400": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "403": {
+                        "$ref": "#/components/responses/ForbiddenResponse"
                     },
                     "404": {
                         "$ref": "#/components/responses/NotFoundResponse"
                     },
-                    "422": {
-                        "$ref": "#/components/responses/InvalidDataResponse"
+                    "500": {
+                        "$ref": "#/components/responses/InternalServerErrorResponse"
                     }
                 },
                 "security": [
@@ -152,26 +279,60 @@
                         "bearerAuth": []
                     }
                 ]
-            },
-            "delete": {
+            }
+        },
+        "/user_banner": {
+            "get": {
                 "tags": [
                     "Avito Banner"
                 ],
-                "summary": "Delete banner",
-                "operationId": "deleteBanner",
+                "summary": "Получение баннера для пользователя",
+                "operationId": "getUserBanners",
                 "parameters": [
                     {
-                        "name": "id",
-                        "in": "path",
-                        "required": true,
+                        "name": "tag_id",
+                        "in": "query",
+                        "required": false,
                         "schema": {
+                            "description": "Идентификатор тега",
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "feature_id",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "description": "Идентификатор фичи",
+                            "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "use_last_revision",
+                        "in": "query",
+                        "required": false,
+                        "schema": {
+                            "description": "Получать актуальную информацию",
+                            "type": "boolean",
+                            "default": false
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен пользователя",
+                        "schema": {
+                            "type": "string",
+                            "example": "user_token"
                         }
                     }
                 ],
                 "responses": {
                     "200": {
-                        "$ref": "#/components/responses/SuccessDeletedResponse"
+                        "$ref": "#/components/responses/BannerResponse"
+                    },
+                    "400": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
                     },
                     "401": {
                         "$ref": "#/components/responses/UnauthorizedResponse"
@@ -187,7 +348,7 @@
                 ]
             }
         },
-        "/v1/features": {
+        "/feature": {
             "get": {
                 "tags": [
                     "Avito Feature"
@@ -212,6 +373,15 @@
                             "type": "integer",
                             "default": 1
                         }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
                     }
                 ],
                 "responses": {
@@ -234,6 +404,17 @@
                 ],
                 "summary": "Create feature",
                 "operationId": "createFeature",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "$ref": "#/components/requestBodies/CreateFeatureRequestBody"
                 },
@@ -255,7 +436,7 @@
                 ]
             }
         },
-        "/v1/features/{id}": {
+        "/feature/{id}": {
             "get": {
                 "tags": [
                     "Avito Feature"
@@ -269,6 +450,15 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
                         }
                     }
                 ],
@@ -302,6 +492,15 @@
                         "required": true,
                         "schema": {
                             "type": "integer"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
                         }
                     }
                 ],
@@ -342,6 +541,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
                     }
                 ],
                 "responses": {
@@ -362,7 +570,7 @@
                 ]
             }
         },
-        "/v1/tags": {
+        "/tag": {
             "get": {
                 "tags": [
                     "Avito Tag"
@@ -370,6 +578,15 @@
                 "summary": "Get list of tags",
                 "operationId": "tagsList",
                 "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    },
                     {
                         "name": "limit",
                         "in": "query",
@@ -409,6 +626,17 @@
                 ],
                 "summary": "Create tag",
                 "operationId": "createTag",
+                "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
                 "requestBody": {
                     "$ref": "#/components/requestBodies/CreateTagRequestBody"
                 },
@@ -430,7 +658,59 @@
                 ]
             }
         },
-        "/v1/tags/{id}": {
+        "/tag/{banner_id}/attach-tags": {
+            "post": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Attach tags to banner",
+                "operationId": "attachTagsToBanner",
+                "parameters": [
+                    {
+                        "name": "banner_id",
+                        "in": "path",
+                        "description": "Banner ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AttachDetachBannerTagsRequestBody"
+                },
+                "responses": {
+                    "201": {
+                        "$ref": "#/components/responses/TagCollectionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    },
+                    "422": {
+                        "$ref": "#/components/responses/InvalidDataResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
+        },
+        "/tag/{id}": {
             "get": {
                 "tags": [
                     "Avito Tag"
@@ -438,6 +718,15 @@
                 "summary": "Get tag by id",
                 "operationId": "getTag",
                 "parameters": [
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    },
                     {
                         "name": "id",
                         "in": "path",
@@ -478,6 +767,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
                     }
                 ],
                 "requestBody": {
@@ -517,6 +815,15 @@
                         "schema": {
                             "type": "integer"
                         }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
                     }
                 ],
                 "responses": {
@@ -536,36 +843,201 @@
                     }
                 ]
             }
+        },
+        "/tag/{banner_id}/detach-tags": {
+            "delete": {
+                "tags": [
+                    "Avito Tag"
+                ],
+                "summary": "Detach tags from banner",
+                "operationId": "detachTags",
+                "parameters": [
+                    {
+                        "name": "banner_id",
+                        "in": "path",
+                        "description": "Banner ID",
+                        "required": true,
+                        "schema": {
+                            "type": "integer",
+                            "format": "int64"
+                        }
+                    },
+                    {
+                        "name": "token",
+                        "in": "header",
+                        "description": "Токен админа",
+                        "schema": {
+                            "type": "string",
+                            "example": "admin_token"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "$ref": "#/components/requestBodies/AttachDetachBannerTagsRequestBody"
+                },
+                "responses": {
+                    "200": {
+                        "$ref": "#/components/responses/TagCollectionResponse"
+                    },
+                    "401": {
+                        "$ref": "#/components/responses/UnauthorizedResponse"
+                    },
+                    "404": {
+                        "$ref": "#/components/responses/NotFoundResponse"
+                    }
+                },
+                "security": [
+                    {
+                        "bearerAuth": []
+                    }
+                ]
+            }
         }
     },
     "components": {
         "schemas": {
-            "CreateBannerRequest": {
+            "AuthUserRequest": {
                 "required": [
-                    "feature_id",
-                    "json_data"
+                    "email",
+                    "password"
                 ],
                 "properties": {
+                    "email": {
+                        "description": "User email",
+                        "type": "string",
+                        "example": "admin@test.com"
+                    },
+                    "password": {
+                        "description": "User password",
+                        "type": "string",
+                        "example": "password"
+                    }
+                },
+                "type": "object"
+            },
+            "AttachDetachBannerTagsRequest": {
+                "required": [
+                    "tags"
+                ],
+                "properties": {
+                    "tags": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
+                    }
+                },
+                "type": "object"
+            },
+            "CreateBannerRequest": {
+                "required": [
+                    "tag_ids",
+                    "feature_id",
+                    "content",
+                    "is_active"
+                ],
+                "properties": {
+                    "tag_ids": {
+                        "description": "Идентификаторы тэгов",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
+                    },
                     "feature_id": {
+                        "description": "Идентификатор фичи",
                         "type": "integer",
                         "example": 1
                     },
-                    "json_data": {
-                        "type": "string",
-                        "example": "{\"url\": \"https://google.com\", \"title\": \"google\"}"
+                    "content": {
+                        "description": "Содержимое баннера",
+                        "type": "object",
+                        "example": "{\"title\": \"some_title\", \"text\": \"some_text\", \"url\": \"some_url\"}",
+                        "additionalProperties": true
+                    },
+                    "is_active": {
+                        "description": "Флаг активности баннера",
+                        "type": "boolean",
+                        "example": true
                     }
                 },
                 "type": "object"
             },
             "UpdateBannerRequest": {
+                "required": [
+                    "tag_ids",
+                    "feature_id",
+                    "content",
+                    "is_active"
+                ],
                 "properties": {
-                    "feature_id": {
-                        "type": "integer",
-                        "example": 1
+                    "tag_ids": {
+                        "description": "Идентификаторы тэгов",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ],
+                        "nullable": true
                     },
-                    "json_data": {
-                        "type": "string",
-                        "example": "{\"url\": \"https://google.com\", \"title\": \"google\"}"
+                    "feature_id": {
+                        "description": "Идентификатор фичи",
+                        "type": "integer",
+                        "example": 1,
+                        "nullable": true
+                    },
+                    "content": {
+                        "description": "Содержимое баннера",
+                        "type": "object",
+                        "example": "{\"title\": \"some_title\", \"text\": \"some_text\", \"url\": \"some_url\"}",
+                        "nullable": true,
+                        "additionalProperties": true
+                    },
+                    "is_active": {
+                        "description": "Флаг активности баннера",
+                        "type": "boolean",
+                        "example": true,
+                        "nullable": true
+                    }
+                },
+                "type": "object"
+            },
+            "UpdateStatusBannerRequest": {
+                "required": [
+                    "feature_id",
+                    "content"
+                ],
+                "properties": {
+                    "enable": {
+                        "type": "boolean",
+                        "example": true
+                    },
+                    "banner_ids": {
+                        "type": "array",
+                        "items": {
+                            "type": "integer",
+                            "format": "int64"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
                     }
                 },
                 "type": "object"
@@ -613,47 +1085,86 @@
                 "type": "object"
             },
             "BannerCollection": {
-                "required": [
-                    "data"
-                ],
-                "properties": {
-                    "data": {
-                        "type": "array",
-                        "items": {
-                            "$ref": "#/components/schemas/BannerResource"
-                        }
-                    }
-                },
-                "type": "object"
+                "type": "array",
+                "items": {
+                    "$ref": "#/components/schemas/BannerResource"
+                }
             },
             "BannerResource": {
                 "required": [
-                    "id",
+                    "banner_id",
+                    "tag_ids",
                     "feature_id",
-                    "json_data",
+                    "content",
                     "created_at",
                     "updated_at"
                 ],
                 "properties": {
-                    "id": {
+                    "banner_id": {
+                        "description": "Идентификатор баннера",
                         "type": "integer",
                         "example": 1
+                    },
+                    "tag_ids": {
+                        "description": "Идентификаторы тэгов",
+                        "type": "array",
+                        "items": {
+                            "type": "integer"
+                        },
+                        "example": [
+                            1,
+                            2,
+                            3
+                        ]
                     },
                     "feature_id": {
+                        "description": "Идентификатор фичи",
                         "type": "integer",
                         "example": 1
                     },
-                    "json_data": {
+                    "content": {
                         "type": "string",
-                        "example": "[]"
+                        "example": "{\"title\": \"some_title\", \"text\": \"some_text\", \"url\": \"some_url\"}"
+                    },
+                    "is_active": {
+                        "description": "Флаг активности баннера",
+                        "type": "boolean",
+                        "example": true
                     },
                     "created_at": {
+                        "description": "Дата создания баннера",
                         "type": "string",
                         "format": "date-time"
                     },
                     "updated_at": {
+                        "description": "Дата обновления баннера",
                         "type": "string",
                         "format": "date-time"
+                    }
+                },
+                "type": "object"
+            },
+            "CreateBannerResource": {
+                "required": [
+                    "banner_id"
+                ],
+                "properties": {
+                    "banner_id": {
+                        "description": "Идентификатор созданного баннера",
+                        "type": "integer",
+                        "example": 1
+                    }
+                },
+                "type": "object"
+            },
+            "UserBannerResource": {
+                "required": [
+                    "content"
+                ],
+                "properties": {
+                    "content": {
+                        "type": "string",
+                        "example": "{\"title\": \"some_title\", \"text\": \"some_text\", \"url\": \"some_url\"}"
                     }
                 },
                 "type": "object"
@@ -682,13 +1193,13 @@
             },
             "FeatureResource": {
                 "required": [
-                    "id",
+                    "feature_id",
                     "name",
                     "created_at",
                     "updated_at"
                 ],
                 "properties": {
-                    "id": {
+                    "feature_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -776,30 +1287,30 @@
                 "properties": {
                     "message": {
                         "type": "string",
-                        "example": "This action is unauthorized."
+                        "example": "This action is unauthorized"
+                    }
+                },
+                "type": "object"
+            },
+            "InternalServerError": {
+                "required": [
+                    "message"
+                ],
+                "properties": {
+                    "error": {
+                        "type": "string"
                     }
                 },
                 "type": "object"
             },
             "InvalidData": {
                 "required": [
-                    "message",
-                    "errors"
+                    "error"
                 ],
                 "properties": {
-                    "message": {
+                    "error": {
                         "type": "string",
                         "example": "Any error message"
-                    },
-                    "errors": {
-                        "type": "object",
-                        "additionalProperties": {
-                            "type": "array",
-                            "items": {
-                                "type": "string",
-                                "example": "Validation error"
-                            }
-                        }
                     }
                 },
                 "type": "object"
@@ -824,18 +1335,6 @@
                     "message": {
                         "type": "string",
                         "example": "Success."
-                    }
-                },
-                "type": "object"
-            },
-            "SuccessDeleted": {
-                "required": [
-                    "message"
-                ],
-                "properties": {
-                    "message": {
-                        "type": "string",
-                        "example": "Success deleted."
                     }
                 },
                 "type": "object"
@@ -876,13 +1375,13 @@
             },
             "TagResource": {
                 "required": [
-                    "id",
+                    "tag_id",
                     "name",
                     "created_at",
                     "updated_at"
                 ],
                 "properties": {
-                    "id": {
+                    "tag_id": {
                         "type": "integer",
                         "example": 1
                     },
@@ -904,7 +1403,7 @@
         },
         "responses": {
             "BannerCollectionResponse": {
-                "description": "Success",
+                "description": "OK",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -914,11 +1413,31 @@
                 }
             },
             "BannerResponse": {
-                "description": "Success",
+                "description": "Created",
                 "content": {
                     "application/json": {
                         "schema": {
                             "$ref": "#/components/schemas/BannerResource"
+                        }
+                    }
+                }
+            },
+            "CreateBannerResponse": {
+                "description": "Created",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/CreateBannerResource"
+                        }
+                    }
+                }
+            },
+            "UserBannerResponse": {
+                "description": "OK",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UserBannerResource"
                         }
                     }
                 }
@@ -954,7 +1473,7 @@
                 }
             },
             "ForbiddenResponse": {
-                "description": "Forbidden Response",
+                "description": "Пользователь не имеет доступа",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -963,8 +1482,18 @@
                     }
                 }
             },
+            "InternalServerErrorResponse": {
+                "description": "Internal server error",
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/InternalServerError"
+                        }
+                    }
+                }
+            },
             "InvalidDataResponse": {
-                "description": "Invalid data",
+                "description": "Некорректные данные",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -994,17 +1523,10 @@
                 }
             },
             "SuccessDeletedResponse": {
-                "description": "Success Deleted",
-                "content": {
-                    "application/json": {
-                        "schema": {
-                            "$ref": "#/components/schemas/SuccessDeleted"
-                        }
-                    }
-                }
+                "description": "Success Deleted"
             },
             "UnauthorizedResponse": {
-                "description": "Unauthorized",
+                "description": "Пользователь не авторизован",
                 "content": {
                     "application/json": {
                         "schema": {
@@ -1035,6 +1557,26 @@
             }
         },
         "requestBodies": {
+            "AuthUserRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/AuthUserRequest"
+                        }
+                    }
+                }
+            },
+            "AttachDetachBannerTagsRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/AttachDetachBannerTagsRequest"
+                        }
+                    }
+                }
+            },
             "CreateBannerRequestBody": {
                 "required": true,
                 "content": {
@@ -1051,6 +1593,16 @@
                     "application/json": {
                         "schema": {
                             "$ref": "#/components/schemas/UpdateBannerRequest"
+                        }
+                    }
+                }
+            },
+            "UpdateStatusBannerRequestBody": {
+                "required": true,
+                "content": {
+                    "application/json": {
+                        "schema": {
+                            "$ref": "#/components/schemas/UpdateStatusBannerRequest"
                         }
                     }
                 }

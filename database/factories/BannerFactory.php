@@ -22,7 +22,7 @@ class BannerFactory extends Factory
 
         return [
             'feature_id' => Feature::factory(),
-            'json_data' => $jsonData,
+            'content' => $jsonData,
         ];
     }
 }

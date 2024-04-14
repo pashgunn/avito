@@ -6,34 +6,21 @@ use OpenApi\Attributes as OA;
 
 #[OA\Response(
     response: 'InvalidDataResponse',
-    description: 'Invalid data',
+    description: 'Некорректные данные',
     content: new OA\JsonContent(
         ref: '#/components/schemas/InvalidData'
     )
 )]
 #[OA\Schema(
     required: [
-        'message',
-        'errors',
+        'error',
     ],
     properties: [
         new OA\Property(
-            property: 'message',
+            property: 'error',
             type: 'string',
             example: 'Any error message'
         ),
-
-        new OA\Property(
-            property: 'errors',
-            type: 'object',
-            additionalProperties: new OA\AdditionalProperties(
-                type: 'array',
-                items: new OA\Items(
-                    type: 'string',
-                    example: 'Validation error'
-                ),
-            ),
-        )
     ],
 )]
 class InvalidData

@@ -4,7 +4,7 @@ namespace App\Services\V1\Eloquent\Tag;
 
 use App\Http\DTO\PaginationDto;
 use App\Models\Tag;
-use Illuminate\Pagination\LengthAwarePaginator;
+use Illuminate\Contracts\Pagination\LengthAwarePaginator;
 
 class QueryService
 {

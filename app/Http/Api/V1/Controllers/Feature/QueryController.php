@@ -19,7 +19,7 @@ class QueryController extends Controller
     }
 
     #[OA\Get(
-        path: '/v1/features',
+        path: '/feature',
         operationId: 'featuresList',
         summary: 'Get list of features',
         security: [['bearerAuth' => []]],
@@ -42,7 +42,16 @@ class QueryController extends Controller
                     type: 'integer',
                     default: 1
                 )
-            )
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
         ],
         responses: [
             new OA\Response(
@@ -59,12 +68,12 @@ class QueryController extends Controller
     {
         $features = $this->queryService->getAll($dto->build($request));
 
-        return $this->responseWithoutDataWrapping(FeatureCollection::make($features));
+        return $this->responseOk(FeatureCollection::make($features));
     }
 
 
     #[OA\Get(
-        path: '/v1/features/{id}',
+        path: '/feature/{id}',
         operationId: 'getFeature',
         summary: 'Get feature by id',
         security: [['bearerAuth' => []]],
@@ -76,6 +85,15 @@ class QueryController extends Controller
                 required: true,
                 schema: new OA\Schema(
                     type: 'integer'
+                )
+            ),
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
                 )
             ),
         ],

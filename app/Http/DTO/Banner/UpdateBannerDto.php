@@ -6,7 +6,11 @@ use App\Http\DTO\BaseDto;
 
 class UpdateBannerDto extends BaseDto
 {
-    public ?int $feature_id = null;
+    public ?array $tag_ids;
 
-    public ?string $json_data = null;
+    public ?int $feature_id;
+
+    public ?string $content;
+
+    public ?bool $is_active;
 }

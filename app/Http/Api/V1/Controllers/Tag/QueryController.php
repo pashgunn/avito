@@ -19,12 +19,21 @@ class QueryController extends Controller
     }
 
     #[OA\Get(
-        path: '/v1/tags',
+        path: '/tag',
         operationId: 'tagsList',
         summary: 'Get list of tags',
         security: [['bearerAuth' => []]],
         tags: ['Avito Tag'],
         parameters: [
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
             new OA\Parameter(
                 name: 'limit',
                 in: 'query',
@@ -59,17 +68,26 @@ class QueryController extends Controller
     {
         $tags = $this->queryService->getAll($dto->build($request));
 
-        return $this->responseWithoutDataWrapping(TagCollection::make($tags));
+        return $this->responseOk(TagCollection::make($tags));
     }
 
 
     #[OA\Get(
-        path: '/v1/tags/{id}',
+        path: '/tag/{id}',
         operationId: 'getTag',
         summary: 'Get tag by id',
         security: [['bearerAuth' => []]],
         tags: ['Avito Tag'],
         parameters: [
+            new OA\Parameter(
+                name: 'token',
+                description: 'Токен админа',
+                in: 'header',
+                schema: new OA\Schema(
+                    type: 'string',
+                    example: 'admin_token'
+                )
+            ),
             new OA\Parameter(
                 name: 'id',
                 in: 'path',

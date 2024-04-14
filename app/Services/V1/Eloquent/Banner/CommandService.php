@@ -4,6 +4,7 @@ namespace App\Services\V1\Eloquent\Banner;
 
 use App\Http\DTO\Banner\CreateBannerDto;
 use App\Http\DTO\Banner\UpdateBannerDto;
+use App\Http\DTO\Banner\UpdateStatusBannerDto;
 use App\Models\Banner;
 
 readonly class CommandService
@@ -15,15 +16,26 @@ readonly class CommandService
 
     public function create(CreateBannerDto $dto): Banner
     {
-        $dto->json_data = json_encode($dto->json_data, JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK);
-        return Banner::create($dto->toArray());
+        $tags = $dto->tag_ids;
+        unset($dto->tag_ids);
+
+        $dto->content = json_encode(
+            $dto->content,
+            JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
+        );
+
+        $banner =  Banner::create($dto->toArrayWithoutNull());
+
+        $banner->tags()->sync($tags);
+
+        return $banner;
     }
 
     public function update(int $bannerId, UpdateBannerDto $dto): Banner
     {
         $banner = $this->queryService->getById($bannerId);
 
-        $banner->update($dto->toArray());
+        $banner->update($dto->toArrayWithoutNull());
 
         return $banner;
     }
@@ -33,5 +45,10 @@ readonly class CommandService
         $banner = $this->queryService->getById($bannerId);
 
         $banner->delete();
+    }
+
+    public function toggleStatus(UpdateStatusBannerDto $dto): bool|int
+    {
+        return Banner::query()->where('id', $dto->banner_id)->update(['is_active' => $dto->is_active]);
     }
 }
