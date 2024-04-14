@@ -11,15 +11,15 @@ class Auth
     /**
      * Handle an incoming request.
      *
-     * @param Closure(Request): (Response) $next
+     * @param  Closure(Request): (Response)  $next
      */
     public function handle(Request $request, Closure $next): Response
     {
         $token = $request->header('token');
 
-        if (!($token === config('app.admin_token') || $token === config('app.user_token'))) {
+        if (! ($token === config('app.admin_token') || $token === config('app.user_token'))) {
             return response()->json([
-                'message' => 'Unauthorized'
+                'message' => 'Unauthorized',
             ], 401);
         }
 

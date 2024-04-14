@@ -18,7 +18,7 @@ abstract class Controller
         return $this->jsonResponse($data, Response::HTTP_CREATED);
     }
 
-    protected function responseOk(JsonResource|array $data = null): JsonResponse
+    protected function responseOk(JsonResource|array|null $data = null): JsonResponse
     {
         return $this->jsonResponse($data, Response::HTTP_OK);
     }
@@ -26,5 +26,10 @@ abstract class Controller
     protected function responseOkWithMessage(string $message): JsonResponse
     {
         return $this->jsonResponse(['message' => $message], Response::HTTP_OK);
+    }
+
+    protected function responseBadRequest(string $message): JsonResponse
+    {
+        return $this->jsonResponse(['message' => $message], Response::HTTP_BAD_REQUEST);
     }
 }

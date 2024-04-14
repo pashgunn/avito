@@ -18,10 +18,16 @@ use OpenApi\Attributes as OA;
     ]
 )]
 #[OA\Schema(
-    type: 'array',
-    items: new OA\Items(
-        ref: '#/components/schemas/FeatureResource'
-    )
+    required: ['data'],
+    properties: [
+        new OA\Property(
+            property: 'data',
+            type: 'array',
+            items: new OA\Items(
+                ref: '#/components/schemas/TagResource'
+            )
+        ),
+    ]
 )]
 class TagCollection extends ResourceCollection
 {

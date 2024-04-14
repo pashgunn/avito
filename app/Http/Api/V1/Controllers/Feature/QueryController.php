@@ -22,7 +22,6 @@ class QueryController extends Controller
         path: '/feature',
         operationId: 'featuresList',
         summary: 'Get list of features',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Feature'],
         parameters: [
             new OA\Parameter(
@@ -71,12 +70,10 @@ class QueryController extends Controller
         return $this->responseOk(FeatureCollection::make($features));
     }
 
-
     #[OA\Get(
         path: '/feature/{id}',
         operationId: 'getFeature',
         summary: 'Get feature by id',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Feature'],
         parameters: [
             new OA\Parameter(

@@ -11,8 +11,6 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 
 /**
- * 
- *
  * @property int $id
  * @property int $banner_id
  * @property int $tag_id
@@ -20,6 +18,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @property-read int|null $banners_count
  * @property-read Collection<int, Tag> $tags
  * @property-read int|null $tags_count
+ *
  * @method static BannerTagFactory factory($count = null, $state = [])
  * @method static Builder|BannerTag newModelQuery()
  * @method static Builder|BannerTag newQuery()
@@ -27,6 +26,7 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
  * @method static Builder|BannerTag whereBannerId($value)
  * @method static Builder|BannerTag whereTagId($value)
  * @method static Builder|BannerTag whereId($value)
+ *
  * @mixin Eloquent
  */
 class BannerTag extends Model

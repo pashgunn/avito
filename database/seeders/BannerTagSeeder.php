@@ -5,7 +5,6 @@ namespace Database\Seeders;
 use App\Models\Banner;
 use App\Models\BannerTag;
 use App\Models\Tag;
-use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
 class BannerTagSeeder extends Seeder

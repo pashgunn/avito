@@ -62,10 +62,11 @@ abstract class BaseDto
         $properties = get_class_vars(get_class($this));
 
         foreach ($request->validated() as $key => $value) {
-            if (key_exists($key, $properties) && !is_null($value)) {
+            if (array_key_exists($key, $properties) && ! is_null($value)) {
                 $this->$key = $value;
             }
         }
+
         return $this;
     }
 
@@ -74,10 +75,11 @@ abstract class BaseDto
         $properties = get_class_vars(get_class($this));
 
         foreach ($data as $key => $value) {
-            if (key_exists($key, $properties) && !is_null($value)) {
+            if (array_key_exists($key, $properties) && ! is_null($value)) {
                 $this->$key = $value;
             }
         }
+
         return $this;
     }
 
@@ -91,6 +93,7 @@ abstract class BaseDto
                 $data[$property] = $this->$property;
             }
         }
+
         return $data;
     }
 }

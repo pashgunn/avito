@@ -29,7 +29,6 @@ class CommandController extends Controller
         path: '/banner',
         operationId: 'createBanner',
         summary: 'Создание нового баннера',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/CreateBannerRequestBody'
         ),
@@ -76,10 +75,9 @@ class CommandController extends Controller
     }
 
     #[OA\Put(
-        path: '/banner/bulk-toggle-status',
-        operationId: 'bulkToggleStatus',
-        summary: 'Bulk multiple banner statuses',
-        security: [['bearerAuth' => []]],
+        path: '/banner/toggle-status',
+        operationId: 'toggleStatus',
+        summary: 'Toggle banner status',
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/UpdateStatusBannerRequestBody'
         ),
@@ -110,20 +108,23 @@ class CommandController extends Controller
             ),
         ]
     )]
-    public function updateBannerStatuses(
+    public function updateBannerStatus(
         UpdateStatusBannerRequest $request,
         UpdateStatusBannerDto $dto
     ): JsonResponse {
-        $banners = $this->commandService->toggleStatus($dto->build($request));
+        $isUpdated = $this->commandService->toggleStatus($dto->build($request));
 
-        return $this->responseOk(['toggled_banners_count' => $banners]);
+        if (! $isUpdated) {
+            return $this->responseBadRequest('Something went wrong');
+        }
+
+        return $this->responseOkWithMessage('Banner status updated successfully');
     }
 
     #[OA\Patch(
         path: '/banner/{id}',
         operationId: 'updateBanner',
         summary: 'Обновление содержимого баннера',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/UpdateBannerRequestBody'
         ),
@@ -186,7 +187,6 @@ class CommandController extends Controller
         path: '/banner/{id}',
         operationId: 'deleteBanner',
         summary: 'Удаление баннера по идентификатору',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Banner'],
         parameters: [
             new OA\Parameter(
@@ -245,7 +245,6 @@ class CommandController extends Controller
         path: '/banner/bulk-delete',
         operationId: 'bulkDeleteBanners',
         summary: 'Bulk delete banners',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Banner'],
         parameters: [
             new OA\Parameter(

@@ -24,7 +24,6 @@ class QueryController extends Controller
         path: '/banner',
         operationId: 'bannersList',
         summary: 'Getting all banners with filtering by feature and/or tag',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Banner'],
         parameters: [
             new OA\Parameter(
@@ -100,12 +99,10 @@ class QueryController extends Controller
         return $this->responseOk(BannerCollection::make($banners));
     }
 
-
     #[OA\Get(
         path: '/user_banner',
         operationId: 'getUserBanners',
         summary: 'Получение баннера для пользователя',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Banner'],
         parameters: [
             new OA\Parameter(

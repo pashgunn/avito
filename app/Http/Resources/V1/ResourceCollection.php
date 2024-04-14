@@ -76,8 +76,8 @@ class ResourceCollection extends \Illuminate\Http\Resources\Json\ResourceCollect
                 'path' => $resource['path'],
                 'per_page' => $resource['per_page'],
                 'to' => $resource['to'],
-                'total' => $resource['total']
-            ]
+                'total' => $resource['total'],
+            ],
         ];
     }
 }

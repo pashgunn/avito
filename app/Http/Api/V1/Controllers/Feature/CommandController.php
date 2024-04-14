@@ -23,7 +23,6 @@ class CommandController extends Controller
         path: '/feature',
         operationId: 'createFeature',
         summary: 'Create feature',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/CreateFeatureRequestBody'
         ),
@@ -65,7 +64,6 @@ class CommandController extends Controller
         path: '/feature/{id}',
         operationId: 'updateFeature',
         summary: 'Update feature',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/UpdateFeatureRequestBody'
         ),
@@ -119,7 +117,6 @@ class CommandController extends Controller
         path: '/feature/{id}',
         operationId: 'deleteFeature',
         summary: 'Delete feature',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Feature'],
         parameters: [
             new OA\Parameter(

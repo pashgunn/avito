@@ -22,7 +22,6 @@ class QueryController extends Controller
         path: '/tag',
         operationId: 'tagsList',
         summary: 'Get list of tags',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Tag'],
         parameters: [
             new OA\Parameter(
@@ -51,7 +50,7 @@ class QueryController extends Controller
                     type: 'integer',
                     default: 1
                 )
-            )
+            ),
         ],
         responses: [
             new OA\Response(
@@ -71,12 +70,10 @@ class QueryController extends Controller
         return $this->responseOk(TagCollection::make($tags));
     }
 
-
     #[OA\Get(
         path: '/tag/{id}',
         operationId: 'getTag',
         summary: 'Get tag by id',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Tag'],
         parameters: [
             new OA\Parameter(

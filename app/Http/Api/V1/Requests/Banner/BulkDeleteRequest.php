@@ -6,7 +6,6 @@ use App\Http\Api\V1\Requests\BaseRequest;
 
 class BulkDeleteRequest extends BaseRequest
 {
-
     public function rules(): array
     {
         return [

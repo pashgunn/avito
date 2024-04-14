@@ -16,15 +16,6 @@ use OpenApi\Attributes as OA;
     url: 'http://0.0.0.0:80/api',
     description: 'Base server for development'
 )]
-#[OA\SecurityScheme(
-    securityScheme: 'bearerAuth',
-    type: 'http',
-    description: '',
-    name: 'Authorization',
-    in: 'header',
-    bearerFormat: '',
-    scheme: 'Bearer'
-)]
 #[OA\Tag(
     name: 'Avito Banner',
     description: 'Avito Banners'

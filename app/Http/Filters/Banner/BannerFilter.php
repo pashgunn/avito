@@ -15,7 +15,6 @@ class BannerFilter extends BaseFilterBuilder
 
     protected function createFilterDecorator($name): string
     {
-        return __NAMESPACE__ . '\\' . Str::studly($name);
+        return __NAMESPACE__.'\\'.Str::studly($name);
     }
 }
-

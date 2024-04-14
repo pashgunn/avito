@@ -9,8 +9,8 @@ use App\Http\Api\V1\Requests\Tag\UpdateTagRequest;
 use App\Http\DTO\Banner\AttachDetachBannerTagsDto;
 use App\Http\DTO\Tag\CreateTagDto;
 use App\Http\DTO\Tag\UpdateTagDto;
-use App\Http\Resources\V1\Tag\TagCollection;
 use App\Http\Resources\V1\Tag\TagResource;
+use App\Http\Resources\V1\Tag\TagWithoutPaginationCollection;
 use App\Services\V1\Eloquent\Tag\CommandService;
 use Illuminate\Http\JsonResponse;
 use OpenApi\Attributes as OA;
@@ -26,7 +26,6 @@ class CommandController extends Controller
         path: '/tag',
         operationId: 'createTag',
         summary: 'Create tag',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/CreateTagRequestBody'
         ),
@@ -68,7 +67,6 @@ class CommandController extends Controller
         path: '/tag/{banner_id}/attach-tags',
         operationId: 'attachTagsToBanner',
         summary: 'Attach tags to banner',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/AttachDetachBannerTagsRequestBody'
         ),
@@ -93,7 +91,7 @@ class CommandController extends Controller
         ],
         responses: [
             new OA\Response(
-                ref: '#/components/responses/TagCollectionResponse',
+                ref: '#/components/responses/TagWithoutPaginationCollectionResponse',
                 response: 201,
             ),
             new OA\Response(
@@ -117,14 +115,13 @@ class CommandController extends Controller
     ): JsonResponse {
         $tags = $this->commandService->attachTags($bannerId, $dto->build($request));
 
-        return $this->responseCreated(TagCollection::make($tags));
+        return $this->responseCreated(TagWithoutPaginationCollection::make($tags));
     }
 
     #[OA\Put(
         path: '/tag/{id}',
         operationId: 'updateTag',
         summary: 'Update tag',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/UpdateTagRequestBody'
         ),
@@ -178,7 +175,6 @@ class CommandController extends Controller
         path: '/tag/{id}',
         operationId: 'deleteTag',
         summary: 'Delete tag',
-        security: [['bearerAuth' => []]],
         tags: ['Avito Tag'],
         parameters: [
             new OA\Parameter(
@@ -225,7 +221,6 @@ class CommandController extends Controller
         path: '/tag/{banner_id}/detach-tags',
         operationId: 'detachTags',
         summary: 'Detach tags from banner',
-        security: [['bearerAuth' => []]],
         requestBody: new OA\RequestBody(
             ref: '#/components/requestBodies/AttachDetachBannerTagsRequestBody'
         ),
@@ -250,7 +245,7 @@ class CommandController extends Controller
         ],
         responses: [
             new OA\Response(
-                ref: '#/components/responses/TagCollectionResponse',
+                ref: '#/components/responses/TagWithoutPaginationCollectionResponse',
                 response: 200,
             ),
             new OA\Response(
@@ -270,6 +265,6 @@ class CommandController extends Controller
     ): JsonResponse {
         $tags = $this->commandService->detachTags($bannerId, $dto->build($request));
 
-        return $this->responseOk(TagCollection::make($tags));
+        return $this->responseOk(TagWithoutPaginationCollection::make($tags));
     }
 }

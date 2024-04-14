@@ -57,7 +57,7 @@ use OpenApi\Attributes as OA;
             type: 'boolean',
             example: true,
             nullable: true,
-        )
+        ),
     ],
 )]
 class UpdateBannerRequest extends BaseRequest

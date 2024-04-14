@@ -38,7 +38,6 @@ use OpenApi\Attributes as OA;
 )]
 class AuthUserRequest extends BaseRequest
 {
-
     public function rules(): array
     {
         return [

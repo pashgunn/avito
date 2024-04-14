@@ -26,7 +26,7 @@ readonly class CommandService
             JSON_UNESCAPED_UNICODE | JSON_UNESCAPED_SLASHES | JSON_NUMERIC_CHECK
         );
 
-        $banner =  Banner::create($dto->toArrayWithoutNull());
+        $banner = Banner::create($dto->toArrayWithoutNull());
 
         $banner->tags()->sync($tags);
 

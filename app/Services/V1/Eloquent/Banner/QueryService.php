@@ -15,6 +15,7 @@ use Symfony\Component\Finder\Exception\AccessDeniedException;
 readonly class QueryService
 {
     private const CACHE_DURATION = 5;
+
     private Carbon $cacheDuration;
 
     public function __construct(
@@ -27,7 +28,7 @@ readonly class QueryService
     {
         $bannerQuery = Banner::query()->with('tags')->orderBy('banners.id');
 
-        $cacheKey = 'banners:' . $dto->offset . ':' . $dto->limit;
+        $cacheKey = 'banners:'.$dto->offset.':'.$dto->limit;
 
         $banners = $this->bannerFilter->apply(
             $dto->toArrayWithoutNull(),
@@ -36,14 +37,14 @@ readonly class QueryService
             $dto->limit,
         );
 
-        return Cache::remember($cacheKey, $this->cacheDuration, fn() => $banners);
+        return Cache::remember($cacheKey, $this->cacheDuration, fn () => $banners);
     }
 
     public function getById(int $id): Banner
     {
         $banner = Banner::query()->with('tags')->find($id);
 
-        if (!$banner) {
+        if (! $banner) {
             throw new BannerNotFoundException();
         }
 
@@ -54,14 +55,14 @@ readonly class QueryService
     {
         $banner = Banner::where('banners.feature_id', $dto->feature_id)->whereHas(
             'tags',
-            fn($query) => $query->where('banner_tags.tag_id', $dto->tag_id)
+            fn ($query) => $query->where('banner_tags.tag_id', $dto->tag_id)
         )->first();
 
-        if (!$banner) {
+        if (! $banner) {
             throw new BannerNotFoundException();
         }
 
-        if ($dto->token === config('app.user_token') && !$banner->is_active) {
+        if ($dto->token === config('app.user_token') && ! $banner->is_active) {
             throw new AccessDeniedException('Banner is not active');
         }
 
@@ -70,9 +71,9 @@ readonly class QueryService
         }
 
         return Cache::remember(
-            'banner:feature:' . $dto->feature_id . ':tag:' . $dto->tag_id,
+            'banner:feature:'.$dto->feature_id.':tag:'.$dto->tag_id,
             $this->cacheDuration,
-            fn() => $banner
+            fn () => $banner
         );
     }
 }

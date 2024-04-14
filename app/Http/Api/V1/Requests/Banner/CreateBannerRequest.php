@@ -53,7 +53,7 @@ use OpenApi\Attributes as OA;
             description: 'Флаг активности баннера',
             type: 'boolean',
             example: true,
-        )
+        ),
     ],
 )]
 class CreateBannerRequest extends BaseRequest

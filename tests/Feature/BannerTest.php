@@ -44,15 +44,17 @@ class BannerTest extends TestCase
 
         $this->assertDatabaseHas('banners', [
             'id' => $response->original->id,
-            'feature_id' => $data['feature_id']
+            'feature_id' => $data['feature_id'],
         ]);
     }
 
     /**
      * Test validation errors for required fields.
      *
-     * @param string $missingField Field to be omitted from the request data
+     * @param  string  $missingField  Field to be omitted from the request data
+     *
      * @dataProvider missingFieldProvider
+     *
      * @return void
      */
     public function test_validation_errors_for_missing_fields(string $missingField)
@@ -144,7 +146,7 @@ class BannerTest extends TestCase
             'use_last_revision' => true,
         ];
 
-        $response = $this->json('GET','/api/user_banner', $data);
+        $response = $this->json('GET', '/api/user_banner', $data);
 
         $response->assertOk();
         $response->assertJsonStructure([
@@ -186,7 +188,7 @@ class BannerTest extends TestCase
         ];
         $this->withHeader('token', config('app.user_token'));
 
-        $response = $this->json('GET','/api/user_banner', $data);
+        $response = $this->json('GET', '/api/user_banner', $data);
 
         $response->assertForbidden();
     }
@@ -207,10 +209,10 @@ class BannerTest extends TestCase
             'use_last_revision' => false,
         ];
 
-        $response1 = $this->json('GET','/api/user_banner', $data); // Fetches and caches data
+        $response1 = $this->json('GET', '/api/user_banner', $data); // Fetches and caches data
         $response1->assertOk();
 
-        $response2 = $this->json('GET','/api/user_banner', $data); // Uses cached data
+        $response2 = $this->json('GET', '/api/user_banner', $data); // Uses cached data
         $response2->assertOk();
 
         $this->assertEquals($response1->json(), $response2->json()); // Assert responses are identical
@@ -233,13 +235,13 @@ class BannerTest extends TestCase
             'use_last_revision' => false,
         ];
 
-        $response1 = $this->json('GET','/api/user_banner', $data); // Fetches and caches data
+        $response1 = $this->json('GET', '/api/user_banner', $data); // Fetches and caches data
         $response1->assertOk();
 
         $banner->update(['content' => json_encode(['message' => 'This is a test banner'])]);
 
         $data['use_last_revision'] = true;
-        $response2 = $this->json('GET','/api/user_banner', $data); // Uses non cached data
+        $response2 = $this->json('GET', '/api/user_banner', $data); // Uses non cached data
         $response2->assertOk();
 
         $this->assertNotEquals($response1->json(), $response2->json()); // Assert responses are not identical

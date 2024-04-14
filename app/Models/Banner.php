@@ -13,8 +13,6 @@ use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Support\Carbon;
 
 /**
- * 
- *
  * @property int $id
  * @property int $feature_id
  * @property string $content
@@ -24,6 +22,7 @@ use Illuminate\Support\Carbon;
  * @property-read Feature $feature
  * @property-read Collection<int, Tag> $tags
  * @property-read int|null $tags_count
+ *
  * @method static BannerFactory factory($count = null, $state = [])
  * @method static Builder|Banner newModelQuery()
  * @method static Builder|Banner newQuery()
@@ -35,10 +34,13 @@ use Illuminate\Support\Carbon;
  * @method static Builder|Banner whereUpdatedAt($value)
  * @method static Builder|Banner whereIsEnabled($value)
  * @method static Builder|Banner whereBannerId($value)
+ *
  * @property string $json_data
  * @property bool $is_enabled
+ *
  * @method static Builder|Banner whereContent($value)
  * @method static Builder|Banner whereIsActive($value)
+ *
  * @mixin Eloquent
  */
 class Banner extends Model

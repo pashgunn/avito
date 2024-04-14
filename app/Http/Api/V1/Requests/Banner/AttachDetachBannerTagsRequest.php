@@ -31,7 +31,7 @@ use OpenApi\Attributes as OA;
                 format: 'int64',
             ),
             example: [1, 2, 3],
-        )
+        ),
     ],
 )]
 class AttachDetachBannerTagsRequest extends FormRequest
